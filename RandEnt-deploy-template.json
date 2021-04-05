@@ -51,7 +51,7 @@
 
         //Deploy data network
         {
-            "name": "data-network-template",
+            "name": "[concat('compute-template', copyIndex())]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
             "properties": {
@@ -60,35 +60,39 @@
                     "relativePath": "RandEnt-compute-template.json"
                 },
                 "parameters": {
-                    "deployment-suffix": { "value": "[parameters('deployment-suffix')]" },
+                    "deployment-suffix": { "value": "[concat(parameters('deployment-suffix'), copyIndex())]" },
                     "deployment-location": { "value": "[parameters('deployment-location')]" },
                     "adminUsername": { "value": "[parameters('adminUsername')]" },
                     "adminPassword": { "value": "[parameters('adminPassword')]" },
                     "deployment-env-tag": { "value": "[parameters('deployment-env-tag')]" }
                  }
 
+            },
+            "copy": {
+                "count": 2,
+                "name": "network-loop"
             }
         },
-        //Deploy app network (for testing storage access denial)
-        {
-            "name": "test-network-template",
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2020-10-01",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "relativePath": "RandEnt-compute-template.json"
-                },
-                "parameters": {
-                    "deployment-suffix": { "value": "[concat('test',parameters('deployment-suffix'))]" },
-                    "deployment-location": { "value": "[parameters('deployment-location')]" },
-                    "adminUsername": { "value": "[parameters('adminUsername')]" },
-                    "adminPassword": { "value": "[parameters('adminPassword')]" },
-                    "deployment-env-tag": { "value": "temp" }
-                 }
+        // //Deploy app network (for testing storage access denial)
+        // {
+        //     "name": "test-network-template",
+        //     "type": "Microsoft.Resources/deployments",
+        //     "apiVersion": "2020-10-01",
+        //     "properties": {
+        //         "mode": "Incremental",
+        //         "templateLink": {
+        //             "relativePath": "RandEnt-compute-template.json"
+        //         },
+        //         "parameters": {
+        //             "deployment-suffix": { "value": "[concat('test',parameters('deployment-suffix'))]" },
+        //             "deployment-location": { "value": "[parameters('deployment-location')]" },
+        //             "adminUsername": { "value": "[parameters('adminUsername')]" },
+        //             "adminPassword": { "value": "[parameters('adminPassword')]" },
+        //             "deployment-env-tag": { "value": "temp" }
+        //          }
 
-            }
-        }
+        //     }
+        // }
 
     ]
 }
