@@ -264,5 +264,11 @@
                 }
             }
         }
-    ]
+    ],
+    "outputs": {
+        "vnetresourceID": {
+            "type": "string",
+            "value": "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworks_RandEnt_rg_vnet_name'))]"
+        }
+    }
 }
