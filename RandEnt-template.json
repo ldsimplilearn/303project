@@ -63,30 +63,29 @@
         //     "properties": {}
         // },
 
-        //Deploy storage account
-        {
-            "name": "storage-template",
-            "type": "Microsoft.Resources/deployments",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworks_RandEnt_rg_vnet_name'))]" 
-            ],
-            "apiVersion": "2020-10-01",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "relativePath": "RandEnt-storage-template.json"
-                },
-                "parameters": {
-                    "deployment-suffix": { "value": "[parameters('deployment-suffix')]" },
-                    "deployment-location": { "value": "[parameters('deployment-location')]" },
-                    "allowed_virtualNetworks_vnet_externalid": { "value": "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworks_RandEnt_rg_vnet_name'))]" },
-                    "allowed_virtualNetworks_vnet_subnet": { "value": "default" },
-                    "deployment-env-tag": { "value": "[parameters('deployment-env-tag')]" }
+        // //Deploy storage account
+        // {
+        //     "name": "storage-template",
+        //     "type": "Microsoft.Resources/deployments",
+        //     "dependsOn": [
+        //         "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworks_RandEnt_rg_vnet_name'))]" 
+        //     ],
+        //     "apiVersion": "2020-10-01",
+        //     "properties": {
+        //         "mode": "Incremental",
+        //         "templateLink": {
+        //             "relativePath": "RandEnt-storage-template.json"
+        //         },
+        //         "parameters": {
+        //             "deployment-suffix": { "value": "[parameters('deployment-suffix')]" },
+        //             "deployment-location": { "value": "[parameters('deployment-location')]" },
+        //             "allowed_virtualNetworks_vnet_externalid": { "value": "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworks_RandEnt_rg_vnet_name'))]" },
+        //             "allowed_virtualNetworks_vnet_subnet": { "value": "default" },
+        //             "deployment-env-tag": { "value": "[parameters('deployment-env-tag')]" }
+        //         }
 
-                }
-
-            }
-        },
+        //     }
+        // },
 
         {
             "type": "Microsoft.Network/networkSecurityGroups",
