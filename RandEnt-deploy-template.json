@@ -71,7 +71,7 @@
         },
         //Deploy app network (for testing storage access denial)
         {
-            "name": "data-network-template",
+            "name": "test-network-template",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
             "properties": {
@@ -84,7 +84,7 @@
                     "deployment-location": { "value": "[parameters('deployment-location')]" },
                     "adminUsername": { "value": "[parameters('adminUsername')]" },
                     "adminPassword": { "value": "[parameters('adminPassword')]" },
-                    "deployment-env-tag": { "value": "[parameters('deployment-env-tag')]" }
+                    "deployment-env-tag": { "value": "temp" }
                  }
 
             }
