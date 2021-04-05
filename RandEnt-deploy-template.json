@@ -87,7 +87,7 @@
                 "parameters": {
                     "deployment-suffix": { "value": "[parameters('deployment-suffix')]" },
                     "deployment-location": { "value": "[parameters('deployment-location')]" },
-                    "allowed_virtualNetworks_vnet_externalid": { "value": "[reference(concat('compute-template', '-0')).outputs.vnetresourceID.value]"},
+                    "allowed_virtualNetworks_vnet_externalid": { "value": "[reference(concat('compute-template', '0')).outputs.vnetresourceID.value]"},
                     "allowed_virtualNetworks_vnet_subnet": { "value": "default" },
                     "deployment-env-tag": { "value": "[parameters('deployment-env-tag')]" }
                 }
