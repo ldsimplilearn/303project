@@ -3,7 +3,7 @@
    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "deployment-suffix": {
+        "deployment-prefix": {
             "defaultValue": "RandEnt",
             "type": "String",
             "metadata": {
@@ -47,11 +47,11 @@
         }
     },
     "variables": {
-        "virtualMachines_RandEnt_vm_name": "[concat(toLower(parameters('deployment-suffix')), '-vm')]",
-        "networkInterfaces_randent_vm_nic_name": "[concat(toLower(parameters('deployment-suffix')), '-vm-nic')]",
-        "publicIPAddresses_RandEnt_vm_ip_name": "[concat(toLower(parameters('deployment-suffix')), '-ip')]",
-        "virtualNetworks_RandEnt_rg_vnet_name": "[concat(toLower(parameters('deployment-suffix')), '-vnet')]",
-        "networkSecurityGroups_RandEnt_vm_nsg_name": "[concat(toLower(parameters('deployment-suffix')), '-nsg')]"
+        "virtualMachines_RandEnt_vm_name": "[concat(toLower(parameters('deployment-prefix')), '-vm')]",
+        "networkInterfaces_randent_vm_nic_name": "[concat(toLower(parameters('deployment-prefix')), '-vm-nic')]",
+        "publicIPAddresses_RandEnt_vm_ip_name": "[concat(toLower(parameters('deployment-prefix')), '-ip')]",
+        "virtualNetworks_RandEnt_rg_vnet_name": "[concat(toLower(parameters('deployment-prefix')), '-vnet')]",
+        "networkSecurityGroups_RandEnt_vm_nsg_name": "[concat(toLower(parameters('deployment-prefix')), '-nsg')]"
     },
     "resources": [
         {

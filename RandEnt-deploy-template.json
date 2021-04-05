@@ -85,7 +85,7 @@
                     "relativePath": "RandEnt-storage-template.json"
                 },
                 "parameters": {
-                    "deployment-suffix": { "value": "[parameters('deployment-suffix')]" },
+                    "deployment-suffix": { "value": "[parameters('deployment-prefix')]" },
                     "deployment-location": { "value": "[parameters('deployment-location')]" },
                     "allowed_virtualNetworks_vnet_externalid": { "value": "[reference(concat('compute-template', '0')).outputs.vnetresourceID.value]"},
                     "allowed_virtualNetworks_vnet_subnet": { "value": "default" },
@@ -94,7 +94,7 @@
 
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments', concat('compute-template', '-0'))]"
+                "[resourceId('Microsoft.Resources/deployments', concat('compute-template', '0'))]"
             ]
         }
         // //Deploy app network (for testing storage access denial)
