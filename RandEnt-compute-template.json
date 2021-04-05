@@ -124,6 +124,14 @@
                         "name": "default",
                         "properties": {
                             "addressPrefix": "10.0.0.0/24",
+                            "serviceEndpoints": [
+                                {
+                                    "service": "Microsoft.Storage",
+                                    "locations": [
+                                        "[parameters('deployment-location')]"
+                                    ]
+                                }
+                            ],
                             "delegations": [],
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled"
@@ -218,6 +226,14 @@
             ],
             "properties": {
                 "addressPrefix": "10.0.0.0/24",
+                "serviceEndpoints": [
+                    {
+                        "service": "Microsoft.Storage",
+                        "locations": [
+                            "[parameters('deployment-location')]"
+                        ]
+                    }
+                ],
                 "delegations": [],
                 "privateEndpointNetworkPolicies": "Enabled",
                 "privateLinkServiceNetworkPolicies": "Enabled"
