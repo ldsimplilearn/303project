@@ -1,0 +1,186 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "deployment-suffix": {
+            "defaultValue": "RandEnt",
+            "type": "String",
+            "metadata": {
+                "description": "Specify the prefix for the storage account name."
+            }
+        },
+        "deployment-location": {
+            "defaultValue": "eastus",
+            "type": "String",
+            "allowedValues": [
+                "eastus",
+                "eastus2",
+                "westus",
+                "westus2",
+                "centralus"
+            ],
+            "metadata": {
+                "description": "Specify the location for the storage account."
+            }
+        },
+
+        "allowed_virtualNetworks_vnet_externalid": {
+            "defaultValue": "/subscriptions/d240ca4b-7e27-47cf-afed-bbd6afbf91a5/resourceGroups/assess4-rg/providers/Microsoft.Network/virtualNetworks/assess4-vnet",
+            "type": "String",
+            "metadata": {
+                "description": "Specify the allowed virtual network id."
+            }
+        },
+
+        "allowed_virtualNetworks_vnet_subnet": {
+            "defaultValue": "default",
+            "type": "String",
+            "metadata": {
+                "description": "Specify the allowed subnet."
+            }
+        },
+
+        "deployment-env-tag": {
+            "defaultValue": "test",
+            "type": "String",
+            "metadata": {
+                "description": "Specify the environment tag for the resources."
+            }
+        }
+
+    },
+    "variables": {
+        "storageAccounts_name": "[concat(toLower(parameters('deployment-suffix')), 'stracct')]",
+        "allowed_virtualNetworks_vnet_subnet_path": "[concat('/subnets/', toLower(parameters('allowed_virtualNetworks_vnet_subnet'))) ]"
+
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2021-01-01",
+            "name": "[variables('storageAccounts_name')]",
+            "location": "[parameters('deployment-location')]",
+            "tags": {
+                "Env": "[parameters('deployment-env-tag')]"
+            },
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "kind": "StorageV2",
+            "properties": {
+                "networkAcls": {
+                    "bypass": "AzureServices",
+                    "virtualNetworkRules": [
+                        {
+                            "id": "[concat(parameters('allowed_virtualNetworks_vnet_externalid'), variables('allowed_virtualNetworks_vnet_subnet_path'))]",
+                            "action": "Allow",
+                            "state": "Succeeded"
+                        }
+                    ],
+                    "ipRules": [],
+                    "defaultAction": "Deny"
+                },
+                "supportsHttpsTrafficOnly": true,
+                "encryption": {
+                    "services": {
+                        "file": {
+                            "keyType": "Account",
+                            "enabled": true
+                        },
+                        "blob": {
+                            "keyType": "Account",
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                },
+                "accessTier": "Hot"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices",
+            "apiVersion": "2021-01-01",
+            "name": "[concat(variables('storageAccounts_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_name'))]"
+            ],
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "properties": {
+                "cors": {
+                    "corsRules": []
+                },
+                "deleteRetentionPolicy": {
+                    "enabled": false
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/fileServices",
+            "apiVersion": "2021-01-01",
+            "name": "[concat(variables('storageAccounts_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_name'))]"
+            ],
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "properties": {
+                "protocolSettings": {
+                    "smb": {}
+                },
+                "cors": {
+                    "corsRules": []
+                },
+                "shareDeleteRetentionPolicy": {
+                    "enabled": true,
+                    "days": 7
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/queueServices",
+            "apiVersion": "2021-01-01",
+            "name": "[concat(variables('storageAccounts_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_name'))]"
+            ],
+            "properties": {
+                "cors": {
+                    "corsRules": []
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/tableServices",
+            "apiVersion": "2021-01-01",
+            "name": "[concat(variables('storageAccounts_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_name'))]"
+            ],
+            "properties": {
+                "cors": {
+                    "corsRules": []
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/fileServices/shares",
+            "apiVersion": "2021-01-01",
+            "name": "[concat(variables('storageAccounts_name'), '/default/config-share')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/fileServices', variables('storageAccounts_name'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccounts_name'))]"
+            ],
+            "properties": {
+                "accessTier": "TransactionOptimized",
+                "shareQuota": 5120,
+                "enabledProtocols": "SMB"
+            }
+        }
+    ]
+}
