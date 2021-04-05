@@ -5,27 +5,48 @@
     "parameters": {
         "deployment-suffix": {
             "defaultValue": "RandEnt",
-            "type": "String"
+            "type": "String",
+            "metadata": {
+                "description": "Specify the prefix for the resources."
+            }
         },
         "deployment-location": {
             "defaultValue": "eastus",
-            "type": "String"
+            "type": "String",
+            "allowedValues": [
+                "eastus",
+                "eastus2",
+                "westus",
+                "westus2",
+                "centralus"
+            ],
+            "metadata": {
+                "description": "Specify the location for the resources."
+            }
         },
         "adminUsername": {
             "defaultValue": "azureuser",
-            "type": "String"
+            "type": "String",
+            "metadata": {
+                "description": "Specify the administrator user name."
+            }
         },
         "adminPassword": {
             "defaultValue": "Password1234",
-            "type": "String"
+            "type": "String",
+            "metadata": {
+                "description": "Specify the administrator user password."
+            }
         },
         "deployment-env-tag": {
             "defaultValue": "test",
-            "type": "String"
+            "type": "String",
+            "metadata": {
+                "description": "Specify the environment tag for the resources."
+            }
         }
     },
     "variables": {
-        //"resource-group_name": "[concat(toLower(parameters('suffix')), '-rg')]", 
         "virtualMachines_RandEnt_vm_name": "[concat(toLower(parameters('deployment-suffix')), '-vm')]",
         "networkInterfaces_randent_vm_nic_name": "[concat(toLower(parameters('deployment-suffix')), '-vm-nic')]",
         "publicIPAddresses_RandEnt_vm_ip_name": "[concat(toLower(parameters('deployment-suffix')), '-ip')]",
@@ -33,13 +54,6 @@
         "networkSecurityGroups_RandEnt_vm_nsg_name": "[concat(toLower(parameters('deployment-suffix')), '-nsg')]"
     },
     "resources": [
-        // {
-        //     "type": "Microsoft.Resources/resourceGroups",
-        //     "apiVersion": "2020-10-01",
-        //     "name": "[variables('resource-group_name')]",
-        //     "location": "[parameters('deployment-location')]",
-        //     "properties": {}
-        // },
         {
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2020-08-01",
@@ -50,23 +64,6 @@
             },
             "properties": {
                 "securityRules": [
-                    // {
-                    //     "name": "RDP",
-                    //     "properties": {
-                    //         "protocol": "TCP",
-                    //         "sourcePortRange": "*",
-                    //         "destinationPortRange": "3389",
-                    //         "sourceAddressPrefix": "*",
-                    //         "destinationAddressPrefix": "*",
-                    //         "access": "Allow",
-                    //         "priority": 300,
-                    //         "direction": "Inbound",
-                    //         "sourcePortRanges": [],
-                    //         "destinationPortRanges": [],
-                    //         "sourceAddressPrefixes": [],
-                    //         "destinationAddressPrefixes": []
-                    //     }
-                    // }
                     {
                         "name": "default-allow-ssh",
                         "properties": {
@@ -103,10 +100,8 @@
                 "1"
             ],
             "properties": {
-                // "ipAddress": "20.51.255.20",
                 "publicIPAddressVersion": "IPv4",
                 "publicIPAllocationMethod": "Static",
-                // "idleTimeoutInMinutes": 4,
                 "ipTags": []
             }
         },
@@ -139,74 +134,6 @@
                 "enableDdosProtection": false
             }
         },
-
-
-
-
-//         {
-//             "type": "Microsoft.Compute/virtualMachines",
-//             "apiVersion": "2020-12-01",
-//             "name": "[variables('virtualMachines_RandEnt_vm_name')]",
-//             "location": "[parameters('deployment-location')]",
-//             "dependsOn": [
-//                 "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterfaces_randent_vm_nic_name'))]" 
-//             ],
-//             "tags": {
-//                 "Env": "[parameters('deployment-env-tag')]"
-//             },
-//             "zones": [
-//                 "1"
-//             ],
-//             "properties": {
-//                 "hardwareProfile": {
-// //                    "vmSize": "Standard_D2s_v3"
-//                     "vmSize": "Standard_B1ms"
-//                 },
-//                 "storageProfile": {
-//                     "imageReference": {
-//                         "publisher": "MicrosoftWindowsServer",
-//                         "offer": "WindowsServer",
-//                         "sku": "2016-Datacenter",
-//                         "version": "latest"
-//                     },
-//                       "osDisk": {
-//                         "createOption": "FromImage",
-//                         "managedDisk": {
-//                         "storageAccountType": "StandardSSD_LRS"
-//                         }
-//                     },
-//                     "dataDisks": []
-//                 },
-//                 "osProfile": {
-//                     "computerName": "[variables('virtualMachines_RandEnt_vm_name')]",
-//                     "adminUsername": "[parameters('adminUsername')]",
-//                     "adminPassword": "[parameters('adminPassword')]",
-//                     "windowsConfiguration": {
-//                         "provisionVMAgent": true,
-//                         "enableAutomaticUpdates": true,
-//                         "patchSettings": {
-//                             "patchMode": "AutomaticByOS",
-//                             "enableHotpatching": false
-//                         }
-//                     },
-//                     "secrets": [],
-//                     "allowExtensionOperations": true
-//                 },
-//                 "networkProfile": {
-//                     "networkInterfaces": [
-//                         {
-//                             "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterfaces_randent_vm_nic_name'))]"
-//                         }
-//                     ]
-//                 },
-//                 "diagnosticsProfile": {
-//                     "bootDiagnostics": {
-//                         "enabled": true
-//                     }
-//                 }
-//             }
-//         },
-
 
         {
             "type": "Microsoft.Compute/virtualMachines",
@@ -282,28 +209,6 @@
             }
         },
 
-        // {
-        //     "type": "Microsoft.Network/networkSecurityGroups/securityRules",
-        //     "apiVersion": "2020-08-01",
-        //     "name": "[concat(variables('networkSecurityGroups_RandEnt_vm_nsg_name'), '/RDP')]",
-        //     "dependsOn": [
-        //         "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroups_RandEnt_vm_nsg_name'))]"
-        //     ],
-        //     "properties": {
-        //         "protocol": "TCP",
-        //         "sourcePortRange": "*",
-        //         "destinationPortRange": "3389",
-        //         "sourceAddressPrefix": "*",
-        //         "destinationAddressPrefix": "*",
-        //         "access": "Allow",
-        //         "priority": 300,
-        //         "direction": "Inbound",
-        //         "sourcePortRanges": [],
-        //         "destinationPortRanges": [],
-        //         "sourceAddressPrefixes": [],
-        //         "destinationAddressPrefixes": []
-        //     }
-        // },
         {
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "apiVersion": "2020-08-01",
