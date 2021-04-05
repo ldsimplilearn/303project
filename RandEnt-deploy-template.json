@@ -60,7 +60,7 @@
                     "relativePath": "RandEnt-compute-template.json"
                 },
                 "parameters": {
-                    "deployment-suffix": { "value": "[concat(parameters('deployment-prefix'), '-', copyIndex())]" },
+                    "deployment-prefix": { "value": "[concat(parameters('deployment-prefix'), '-', copyIndex())]" },
                     "deployment-location": { "value": "[parameters('deployment-location')]" },
                     "adminUsername": { "value": "[parameters('adminUsername')]" },
                     "adminPassword": { "value": "[parameters('adminPassword')]" },
@@ -85,7 +85,7 @@
                     "relativePath": "RandEnt-storage-template.json"
                 },
                 "parameters": {
-                    "deployment-suffix": { "value": "[parameters('deployment-prefix')]" },
+                    "deployment-prefix": { "value": "[parameters('deployment-prefix')]" },
                     "deployment-location": { "value": "[parameters('deployment-location')]" },
                     "allowed_virtualNetworks_vnet_externalid": { "value": "[reference(concat('compute-template', '0')).outputs.vnetresourceID.value]"},
                     "allowed_virtualNetworks_vnet_subnet": { "value": "default" },
